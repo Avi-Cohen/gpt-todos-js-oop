@@ -1,0 +1,65 @@
+class TodoList {
+    constructor() {
+      this.todos = [];
+    }
+    
+    add(item) {
+      this.todos.push(item);
+    }
+    
+    update(index, item) {
+      if (index >= 0 && index < this.todos.length) {
+        this.todos[index] = item;
+      } else {
+        console.log('Invalid index');
+      }
+    }
+    
+    remove(index) {
+      if (index >= 0 && index < this.todos.length) {
+        this.todos.splice(index, 1);
+      } else {
+        console.log('Invalid index');
+      }
+    }
+    
+    display() {
+      const list = document.getElementById('todo-list');
+      list.innerHTML = '';
+      for (let i = 0; i < this.todos.length; i++) {
+        const item = document.createElement('li');
+        item.innerHTML = `
+          <span>${this.todos[i]}</span>
+          <button class="edit-btn">Edit</button>
+          <button class="delete-btn">Delete</button>
+        `;
+        item.querySelector('.edit-btn').addEventListener('click', () => {
+          const newItem = prompt('Enter a new task:', this.todos[i]);
+          if (newItem !== null) {
+            this.update(i, newItem);
+            this.display();
+          }
+        });
+        item.querySelector('.delete-btn').addEventListener('click', () => {
+          this.remove(i);
+          this.display();
+        });
+        list.appendChild(item);
+      }
+    }
+  }
+  
+  const myList = new TodoList();
+  
+  const addBtn = document.getElementById('add-btn');
+  addBtn.addEventListener('click', () => {
+    const newItem = document.getElementById('new-todo').value;
+    if (newItem.trim() !== '') {
+      myList.add(newItem);
+      myList.display();
+      document.getElementById('new-todo').value = '';
+    }
+  });
+  
+  myList.display();
+  
